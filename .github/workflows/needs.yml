@@ -1,31 +1,20 @@
-name: Environment variables
+name: context
 on: push
-env:
-  WF_ENV: This is env variables scoped at workflow level
 
 jobs:
-  custom-env:
-    runs-on: ubuntu-latest
-    env:
-      JOB_ENV: This is env variable scoped at job level
-    steps:
-      - name: step 1 in custom-env job
-        env:
-          STEP_ENV: This is environment variable scoped at step level
-        run: |
-          echo "WF_ENV: ${WF_ENV}"
-          echo "JOB_ENV: ${JOB_ENV}"
-          echo "STEP_ENV: ${STEP_ENV}"
-      - name: step 2
-        run: |
-          echo "WF_ENV: ${WF_ENV}"
-          echo "JOB_ENV: ${JOB_ENV}"
-          echo "STEP_ENV: ${STEP_ENV}"
-  custom-env-2:
+  dump_contexts_to_log:
     runs-on: ubuntu-latest
     steps:
-      - name: step 1 in custom-env-2 job
-        run: |
-          echo "WF_ENV: ${WF_ENV}"
-          echo "JOB_ENV: ${JOB_ENV}"
-          echo "STEP_ENV: ${STEP_ENV}"
+      - name: Dump GitHub context
+        id: github_context_step
+        run: echo '${{ toJSON(github) }}'
+      - name: Dump job context
+        run: echo '${{ toJSON(job) }}'
+      - name: Dump steps context
+        run: echo '${{ toJSON(steps) }}'
+      - name: Dump runner context
+        run: echo '${{ toJSON(runner) }}'
+      - name: Dump strategy context
+        run: echo '${{ toJSON(strategy) }}'
+      - name: Dump matrix context
+        run: echo '${{ toJSON(matrix) }}'
